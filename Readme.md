@@ -4,7 +4,7 @@ Mongodb session store for connect.
 
 Fork of [connect-mongo](https://github.com/kcbanner/connect-mongo), simplifies database configuration.
 
-  [![Build Status](https://secure.travis-ci.org/kcbanner/connect-mongo.png?branch=master)](http://travis-ci.org/kcbanner/connect-mongo)
+  [![Build Status](https://secure.travis-ci.org/jfromaniello/yams.png?branch=master)](http://travis-ci.org/jfromaniello/yams)
 
 ## Installation
 
@@ -12,7 +12,7 @@ Fork of [connect-mongo](https://github.com/kcbanner/connect-mongo), simplifies d
 
 ## Usage
 
-~~~
+~~~javascript
 var MongoClient     = require("mongodb").MongoClient;
 var Yams = require('yams');
 
