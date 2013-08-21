@@ -1,88 +1,47 @@
-# connect-mongo
+## YAMS Yet Another MongoDb Session
 
-  MongoDB session store for Connect
+Mongodb session store for connect.
+
+Fork of [connect-mongo](https://github.com/kcbanner/connect-mongo), simplifies database configuration.
 
   [![Build Status](https://secure.travis-ci.org/kcbanner/connect-mongo.png?branch=master)](http://travis-ci.org/kcbanner/connect-mongo)
 
 ## Installation
 
-connect-mongo supports only connect `>= 1.0.3`.
+    $ npm install yams
 
-via npm:
+## Usage
 
-    $ npm install connect-mongo
+~~~
+var MongoClient     = require("mongodb").MongoClient;
+var Yams = require('yams');
 
-## Options
+var store = new Yams(function (callback) {
+  //this will be called once, you must return the collection sessions.
+  MongoClient.connect('mongo://localhost/myapp', function (err, db) {
+    if (err) return callback(err);
+    
+    var sessionsCollection = db.collection('sessions')
 
-  - `db` Database name OR fully instantiated node-mongo-native object
-  - `collection` Collection (optional, default: `sessions`) 
-  - `host` MongoDB server hostname (optional, default: `127.0.0.1`)
-  - `port` MongoDB server port (optional, default: `27017`)
-  - `username` Username (optional)
-  - `password` Password (optional)
-  - `auto_reconnect` This is passed directly to the MongoDB `Server` constructor as the auto_reconnect
-                     option (optional, default: false).
-  - `ssl` Use SSL to connect to MongoDB (optional, default: false).
-  - `url` Connection url of the form: `mongodb://user:pass@host:port/database/collection`.
-          If provided, information in the URL takes priority over the other options.
-  - `mongoose_connection` in the form: `someMongooseDb.connections[0]` to use an existing mongoose connection. (optional)
-  - `stringify` If true, connect-mongo will serialize sessions using `JSON.stringify` before
-                setting them, and deserialize them with `JSON.parse` when getting them.
-                (optional, default: true). This is useful if you are using types that 
-                MongoDB doesn't support.
+    //use TTL in mongodb, the document will be automatically expired when the session ends.
+    sessionsCollection.ensureIndex({expires:1}, {expireAfterSeconds: 0}, function(){});
 
-The second parameter to the `MongoStore` constructor is a callback which will be called once the database connection is established.
-This is mainly used for the tests, however you can use this callback if you want to wait until the store has connected before
-starting your app.
+    callback(null, sessions);
+  });  
+});
 
-## Example
+app.usage(express.session({
+  secret: 'black whisky boycott tango 2013',
+  store:  store
+}));
 
-With express:
-
-    var express = require('express');
-    var MongoStore = require('connect-mongo')(express);
-
-    app.use(express.session({
-        secret: settings.cookie_secret,
-        store: new MongoStore({
-          db: settings.db
-        })
-      }));
-
-With connect:
-
-    var connect = require('connect');
-    var MongoStore = require('connect-mongo')(connect);
-
-## Removing expired sessions
-
-  connect-mongo uses MongoDB's TTL collection feature (2.2+) to
-  have mongod automatically remove expired sessions. (mongod runs this
-  check every minute.)
-
-  **Note:** By connect/express's default, session cookies are set to 
-  expire when the user closes their browser (maxAge: null). In accordance
-  with standard industry practices, connect-mongo will set these sessions
-  to expire two weeks from their last 'set'. You can override this 
-  behavior by manually setting the maxAge for your cookies -- just keep in
-  mind that any value less than 60 seconds is pointless, as mongod will
-  only delete expired documents in a TTL collection every minute.
-
-  For more information, consult connect's [session documentation](http://www.senchalabs.org/connect/session.html)
-
-## Tests
-
-You need `mocha`.
-
-    make test
-
-The tests use a database called `connect-mongo-test`.
+~~~
 
 ## License 
 
 (The MIT License)
 
-Copyright (c) 2011 Casey Banner &lt;kcbanner@gmail.com&gt;
+Copyright (c) 2013 Jose Romaniello &lt;jfromaniello@gmail.com&gt;
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
