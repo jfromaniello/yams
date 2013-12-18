@@ -26,7 +26,7 @@ var store = new Yams(function (callback) {
     //use TTL in mongodb, the document will be automatically expired when the session ends.
     sessionsCollection.ensureIndex({expires:1}, {expireAfterSeconds: 0}, function(){});
 
-    callback(null, sessions);
+    callback(null, sessionsCollection);
   });  
 });
 
