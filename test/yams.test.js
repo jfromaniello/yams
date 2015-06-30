@@ -1,4 +1,5 @@
-var Yams = require('../');
+var session = require('express-session');
+var Yams = require('../')(session);
 
 var expect = require('chai').expect;
 
@@ -10,7 +11,7 @@ var store = new Yams(function (callback) {
   getDb(function (db) {
     callback(null, db.collection('sessions'));
   });
-}); 
+});
 
 
 describe('Yams', function () {
