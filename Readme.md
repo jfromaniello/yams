@@ -12,15 +12,27 @@ Fork of [connect-mongo](https://github.com/kcbanner/connect-mongo), simplifies d
 
 ## Usage
 
+Express 4.x, 5.0 and Connect 3.x:
+~~~javascript
+var session = require('express-session');
+var Yams = require('yams')(session);
+~~~
+
+Express 2.x, 3.x and Connect 1.x, 2.x:
+~~~javascript
+var Yams = require('yams')(express);
+~~~
+
+All:
 ~~~javascript
 var MongoClient     = require("mongodb").MongoClient;
-var Yams = require('yams');
+
 
 var store = new Yams(function (callback) {
   //this will be called once, you must return the collection sessions.
   MongoClient.connect('mongo://localhost/myapp', function (err, db) {
     if (err) return callback(err);
-    
+
     var sessionsCollection = db.collection('sessions')
 
     //use TTL in mongodb, the document will be automatically expired when the session ends.
@@ -37,7 +49,7 @@ app.usage(express.session({
 
 ~~~
 
-## License 
+## License
 
 (The MIT License)
 
