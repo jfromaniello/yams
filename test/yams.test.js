@@ -31,7 +31,26 @@ describe('Yams', function () {
       if (err) return done(err);
       db.collection('sessions').findOne({_id: 'lalalala'}, function (err, session) {
         if (err) return done(err);
+        expect(session.session).to.be.a('string');
         expect(JSON.parse(session.session).foo).to.eql('bar');
+        expect(session).to.have.property('expires');
+        expect(session.expires - new Date())
+          .to.be.at.least(1209600000 - 100)
+          .and.below(1209600000); // default options.inactiveTimeout: 1209600000
+
+        done();
+      });
+    });
+  });
+
+  it('can store a session (not serialized)', function (done) {
+    var store = new Yams(getCollection, {serialize: false});
+    store.set('lalalala', {foo: 'bar', cookie: {}}, function (err) {
+      if (err) return done(err);
+      db.collection('sessions').findOne({_id: 'lalalala'}, function (err, session) {
+        if (err) return done(err);
+        expect(session.session).to.not.be.a('string');
+        expect(session.session.foo).to.eql('bar');
         expect(session).to.have.property('expires');
         expect(session.expires - new Date())
           .to.be.at.least(1209600000 - 100)
