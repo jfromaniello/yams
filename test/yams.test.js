@@ -22,7 +22,7 @@ describe('Yams', function () {
   });
 
   beforeEach(function (done) {
-    db.collection('sessions').remove({}, done);
+    db.collection('sessions').deleteMany({}, done);
   });
 
   it('can store a session', function (done) {
