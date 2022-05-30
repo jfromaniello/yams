@@ -20,13 +20,12 @@
   "devDependencies": {
     "chai": "~3.0.0",
     "express-session": ">= 1.0.0",
-    "mocha": "~2.2.5",
+    "mocha": "^10.0.0",
     "mongo-getdb": "^5.0.0",
     "mongodb": "^4.6.0"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --exit"
   },
-  "main": "./lib/yams",
-  "engines": "node >= 0.4.x"
+  "main": "./lib/yams"
 }
