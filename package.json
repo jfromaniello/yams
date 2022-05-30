@@ -1,6 +1,6 @@
 {
   "name": "yams",
-  "version": "3.1.0",
+  "version": "4.0.0",
   "description": "Yet Another MongoDB Session store [for Connect]",
   "keywords": [
     "connect",
